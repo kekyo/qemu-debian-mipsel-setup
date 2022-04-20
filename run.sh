@@ -13,7 +13,7 @@ qemu-system-mipsel \
   -initrd initrd.img \
   -append "root=/dev/sda1 console=ttyS0 nokaslr" \
   -nographic \
-  -net user,hostfwd=tcp:127.0.0.1:2222-:22 \
-  -net nic,model=e1000-82545em
+  -netdev user,id=net0,hostfwd=tcp:127.0.0.1:2222-:22 \
+  -device e1000,netdev=net0,id=net0,mac=52:54:00:12:34:56
 
 cd ..

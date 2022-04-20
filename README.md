@@ -13,9 +13,7 @@ Perhaps the script needs to be modified slightly to match the latest image. I us
 
 ![installing](Images/installing.png)
 
-2. Rebooted in finally installation step, choose `Execute shell` from menu and do `poweroff` command, then will exit qemu.
-
-3. Ready to use. Run `run.sh` then raise up debian 11 mipsel on qemu!
+2. Ready to use. Run `run.sh` then raise up debian 11 mipsel on qemu!
 
 ![run](Images/run.png)
 

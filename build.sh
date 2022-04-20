@@ -4,15 +4,19 @@
 
 #--------------------------------------------
 # Require these packages.
+
+echo "========================================================"
 echo "sudo apt install qemu qemu-system-mips qemu-utils"
 sudo apt install qemu qemu-system-mips qemu-utils
 
 #--------------------------------------------
 # Enable qcow mounter.
+
 sudo modprobe nbd max_part=8
 
 #--------------------------------------------
 # Create staging directories.
+
 if [ ! -d artifacts ]; then
   mkdir artifacts
 fi
@@ -25,6 +29,7 @@ fi
 
 #--------------------------------------------
 # Download debian image.
+
 cd artifacts
 
 # Choose mirror server and latest image file.
@@ -46,6 +51,7 @@ sudo umount mnt/
 # Create hard disk image.
 
 cd stage
+rm -f hda.qcow
 qemu-img create -f qcow2 hda.qcow 16G
 
 #--------------------------------------------
@@ -60,13 +66,18 @@ qemu-system-mipsel \
   -initrd ../artifacts/initrd-netinst.gz \
   -boot d \
   -nographic \
-  -append "root=/dev/sda1 nokaslr"
+  -no-reboot \
+  -append "root=/dev/sda1 nokaslr" \
+  -netdev user,id=net0 \
+  -device e1000,netdev=net0,id=net0,mac=52:54:00:12:34:56
 
 cd ..
 
 #--------------------------------------------
 # Extract bootable kernel image and root filesystem image.
 
+echo "========================================================"
+echo "sudo qemu-nbd --connect=/dev/nbd0 stage/hda.qcow"
 sudo qemu-nbd --connect=/dev/nbd0 `pwd`/stage/hda.qcow
 sudo mount -r /dev/nbd0p1 `pwd`/mnt
 cp mnt/boot/vmlinuz* stage/vmlinuz
