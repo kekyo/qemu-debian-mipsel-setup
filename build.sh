@@ -6,8 +6,8 @@
 # Require these packages.
 
 echo "========================================================"
-echo "sudo apt install qemu qemu-system-mips qemu-utils"
-sudo apt install qemu qemu-system-mips qemu-utils
+echo "sudo apt install qemu-system-mips qemu-utils"
+sudo apt install qemu-system-mips qemu-utils -y
 
 #--------------------------------------------
 # Enable qcow mounter.
@@ -32,9 +32,10 @@ fi
 
 cd artifacts
 
-# Choose mirror server and latest image file.
+# Check if the Debian ISO file exists in the current directory; if not, download it.
 if [ ! -f debian-*.iso ]; then
-  wget http://cdimage.debian.org/cdimage/release/current/mipsel/iso-cd/debian-11.3.0-mipsel-netinst.iso
+  DEBISO=$(curl -s https://cdimage.debian.org/debian-cd/current/mipsel/iso-cd/SHA256SUMS | grep "debian" | awk '{print $2}')
+  wget http://cdimage.debian.org/cdimage/release/current/mipsel/iso-cd/$DEBISO
 fi
 
 cd ..
